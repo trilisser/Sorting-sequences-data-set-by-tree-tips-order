@@ -1,0 +1,57 @@
+#before using save your nexus tree via FigTree with an "save as currently display" option!!!
+
+library(seqinr)
+library(ape)
+library(tibble)
+
+setwd("C:\\Users\\user\\Desktop\\Новая папка") #a work directory
+
+fas<-read.fasta("TBEV_Zab_38seqs.fasta") #a path to fasta
+tree<-read.nexus("TBEV_SRD06+UCLD+BSP8.MCCT") #a path to a nexus tree
+tab<-data.frame(names=1:length(fas[[1]]))
+
+for (i in 1:length(fas))
+	{
+	seq<-as.character(fas[[i]])
+	tab$col1<-seq
+	names(tab)[names(tab) == "col1"] <- names(fas)[[i]]
+	}
+
+tab<-tab[,-1]
+tab<-t(tab)
+tab<-as.data.frame(tab)
+
+id<-names(fas)
+tab<-add_column(tab, names=id, .before=1)
+rownames(tab) = c(1:length(fas))
+
+tips<-tree$tip.label
+tips<-as.data.frame(tips, quote=FALSE)
+colnames(tips) = c("names")
+tips$names<-gsub("'","", tips$names)
+
+main_tab<-merge(tips, tab, by="names", sort = FALSE) #tree tips order as a reference
+rownames(main_tab) = main_tab$names
+main_tab<-main_tab[,-1]
+
+#converting data.frame as fasta.file
+
+i=1
+j=2
+main_tab$seq <- rep(0, length(fas))
+while (i < length(seq)) 
+	{
+	while (j <= length(seq))
+	{
+	main_tab$seq <- paste (main_tab$seq, main_tab[,i], main_tab[,j], sep = "")
+	i<-i+2
+	j<-j+2
+	}
+}
+	
+main_tab$seq<-gsub("0", "", main_tab$seq)
+last_tab<-data.frame(names=rownames(main_tab), seq=main_tab$seq)
+last_tab$names <- paste(">", last_tab$names, sep = "")
+write.table(last_tab, file="raw_fasta.fas", sep= " ", col.names = FALSE, row.names = FALSE, quote = FALSE)
+
+
