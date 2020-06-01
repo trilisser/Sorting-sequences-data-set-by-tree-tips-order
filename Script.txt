@@ -42,16 +42,25 @@ main_tab$seq <- rep(0, length(fas))
 while (i < length(seq)) 
 	{
 	while (j <= length(seq))
-	{
-	main_tab$seq <- paste (main_tab$seq, main_tab[,i], main_tab[,j], sep = "")
+		{
+	main_tab$seq <- paste(main_tab$seq, main_tab[,i], main_tab[,j], sep = "")
 	i<-i+2
 	j<-j+2
+		}
 	}
-}
 	
 main_tab$seq<-gsub("0", "", main_tab$seq)
 last_tab<-data.frame(names=rownames(main_tab), seq=main_tab$seq)
 last_tab$names <- paste(">", last_tab$names, sep = "")
 write.table(last_tab, file="raw_fasta.fas", sep= " ", col.names = FALSE, row.names = FALSE, quote = FALSE)
 
+rf<-file("raw_fasta.fas")
+str<-readLines(rf)
+finfas<-c()
+i=1
+for(i in 1:length(str)) finfas<-c(finfas, gsub(' ', '\n', str[[i]]))
+writeLines(finfas, rf)
+close(rf)
 
+#rename file on the disk 
+file.rename("raw_fasta.fas", "final_fasta.fas")
