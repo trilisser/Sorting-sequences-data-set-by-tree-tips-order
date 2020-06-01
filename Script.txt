@@ -62,5 +62,5 @@ for(i in 1:length(str)) finfas<-c(finfas, gsub(' ', '\n', str[[i]]))
 writeLines(finfas, rf)
 close(rf)
 
-#rename file on the disk 
+#rename the file on a disk 
 file.rename("raw_fasta.fas", "final_fasta.fas")
