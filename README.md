@@ -1,4 +1,4 @@
-# Sorting-sequences-data-set-by-tree-tips-order
+# Sorting-a-sequences-data-set-by-tree-tips-order
 R script for sorting sequences a data set by tree tips order. It can be usefull when you want to assign several genotypes for a large data set using a phylogenetic tree.
 
 **Important!**
